@@ -21,9 +21,8 @@ import {
 import { render, Features } from '../../utils/render'
 import { Keys } from '../../keyboard'
 import { useId } from '../../hooks/use-id'
-import { useFocusTrap } from '../../hooks/use-focus-trap'
+import { useFocusTrap, Features as FocusTrapFeatures } from '../../hooks/use-focus-trap'
 import { useInertOthers } from '../../hooks/use-inert-others'
-import { contains } from '../../internal/dom-containers'
 import { useWindowEvent } from '../../hooks/use-window-event'
 import { Portal, PortalGroup } from '../portal/portal'
 import { StackMessage, useStackProvider } from '../../internal/stack-context'
@@ -112,7 +111,8 @@ export let Dialog = defineComponent({
     )
   },
   setup(props, { emit }) {
-    let containers = ref<Set<HTMLElement>>(new Set())
+    let containers = ref<Set<Ref<HTMLElement | null>>>(new Set())
+    let nestedDialogCount = ref(0)
 
     let usesOpenClosedState = useOpenClosed()
     let open = computed(() => {
@@ -152,26 +152,51 @@ export let Dialog = defineComponent({
       return dialogState.value === DialogStates.Open
     })
     let internalDialogRef = ref<HTMLDivElement | null>(null)
-    let enabled = ref(dialogState.value === DialogStates.Open)
+    let enabled = computed(() => dialogState.value === DialogStates.Open)
 
-    onUpdated(() => {
-      enabled.value = dialogState.value === DialogStates.Open
-    })
+    let hasNestedDialogs = computed(() => nestedDialogCount.value > 1) // 1 is the current dialog
+    let hasParentDialog = inject(DialogContext, null) !== null
+
+    // If there are multiple dialogs, then you can be the root, the leaf or one
+    // in between. We only care abou whether you are the top most one or not.
+    let position = computed(() => (!hasNestedDialogs.value ? 'leaf' : 'parent'))
 
     let id = `headlessui-dialog-${useId()}`
-    let focusTrapOptions = computed(() => ({ initialFocus: props.initialFocus }))
+    let focusTrapOptions = computed(() => ({
+      initialFocus: ref(props.initialFocus),
+      containers: ref(containers),
+    }))
 
-    useFocusTrap(containers, enabled, focusTrapOptions)
+    useFocusTrap(
+      internalDialogRef,
+      computed(() => {
+        return enabled.value
+          ? match(position.value, {
+              parent: FocusTrapFeatures.RestoreFocus,
+              leaf: FocusTrapFeatures.All,
+            })
+          : FocusTrapFeatures.None
+      }),
+      focusTrapOptions
+    )
     useInertOthers(internalDialogRef, enabled)
-    useStackProvider((message, element) => {
-      return match(message, {
-        [StackMessage.AddElement]() {
-          containers.value.add(element)
-        },
-        [StackMessage.RemoveElement]() {
-          containers.value.delete(element)
-        },
-      })
+    useStackProvider({
+      type: 'Dialog',
+      element: internalDialogRef,
+      onUpdate: (message, type, element) => {
+        if (type !== 'Dialog') return
+
+        return match(message, {
+          [StackMessage.Add]() {
+            containers.value.add(element)
+            nestedDialogCount.value += 1
+          },
+          [StackMessage.Remove]() {
+            containers.value.delete(element)
+            nestedDialogCount.value -= 1
+          },
+        })
+      },
     })
 
     let describedby = useDescriptions({
@@ -200,8 +225,8 @@ export let Dialog = defineComponent({
       let target = event.target as HTMLElement
 
       if (dialogState.value !== DialogStates.Open) return
-      if (containers.value.size !== 1) return
-      if (contains(containers.value, target)) return
+      if (hasNestedDialogs.value) return
+      if (dom(internalDialogRef)?.contains(target)) return
 
       api.close()
       nextTick(() => target?.focus())
@@ -210,6 +235,7 @@ export let Dialog = defineComponent({
     // Scroll lock
     watchEffect(onInvalidate => {
       if (dialogState.value !== DialogStates.Open) return
+      if (hasParentDialog) return
 
       let overflow = document.documentElement.style.overflow
       let paddingRight = document.documentElement.style.paddingRight
@@ -267,7 +293,7 @@ export let Dialog = defineComponent({
       handleKeyDown(event: KeyboardEvent) {
         if (event.key !== Keys.Escape) return
         if (dialogState.value !== DialogStates.Open) return
-        if (containers.value.size > 1) return // 1 is myself, otherwise other elements in the Stack
+        if (hasNestedDialogs.value) return
         event.preventDefault()
         event.stopPropagation()
         api.close()
