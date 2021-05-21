@@ -97,7 +97,7 @@ export function render<TFeature extends Features, TTag extends ElementType, TSlo
 }
 
 function _render<TTag extends ElementType, TSlot>(
-  props: Props<TTag, TSlot> & { ref?: unknown },
+  props: Props<TTag, TSlot> & { ref?: unknown; unmount?: boolean; static?: boolean },
   slot: TSlot = {} as TSlot,
   tag: ElementType,
   name: string
@@ -224,7 +224,7 @@ function compact<T extends Record<any, any>>(object: T) {
   return clone
 }
 
-function omit<T extends Record<any, any>>(object: T, keysToOmit: string[] = []) {
+function omit<T extends Record<any, any>>(object: T, keysToOmit: (keyof T)[] = []) {
   let clone = Object.assign({}, object)
   for (let key of keysToOmit) {
     if (key in clone) delete clone[key]
