@@ -1,4 +1,4 @@
-import React, { createElement, useState } from 'react'
+import React, { createElement, useRef, useState } from 'react'
 import { render } from '@testing-library/react'
 
 import { Dialog } from './dialog'
@@ -428,6 +428,57 @@ describe('Keyboard interactions', () => {
 
         // Verify it is close
         assertDialog({ state: DialogState.InvisibleUnmounted })
+      })
+    )
+  })
+
+  describe('`Tab` key', () => {
+    it(
+      'should be possible to tab around when using the initialFocus ref',
+      suppressConsoleLogs(async () => {
+        function Example() {
+          let [isOpen, setIsOpen] = useState(false)
+          let initialFocusRef = useRef(null)
+          return (
+            <>
+              <button id="trigger" onClick={() => setIsOpen(v => !v)}>
+                Trigger
+              </button>
+              <Dialog open={isOpen} onClose={setIsOpen} initialFocus={initialFocusRef}>
+                Contents
+                <TabSentinel id="a" />
+                <input type="text" id="b" ref={initialFocusRef} />
+              </Dialog>
+            </>
+          )
+        }
+        render(<Example />)
+
+        assertDialog({ state: DialogState.InvisibleUnmounted })
+
+        // Open dialog
+        await click(document.getElementById('trigger'))
+
+        // Verify it is open
+        assertDialog({
+          state: DialogState.Visible,
+          attributes: { id: 'headlessui-dialog-1' },
+        })
+
+        // Verify that the input field is focused
+        assertActiveElement(document.getElementById('b'))
+
+        // Verify that we can tab around
+        await press(Keys.Tab)
+        assertActiveElement(document.getElementById('a'))
+
+        // Verify that we can tab around
+        await press(Keys.Tab)
+        assertActiveElement(document.getElementById('b'))
+
+        // Verify that we can tab around
+        await press(Keys.Tab)
+        assertActiveElement(document.getElementById('a'))
       })
     )
   })
