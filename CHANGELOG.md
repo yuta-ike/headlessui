@@ -88,7 +88,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `aria-orientation` to `Listbox`, which swaps Up/Down with Left/Right keys ([#683](https://github.com/tailwindlabs/headlessui/pull/683))
 - Expose `close` function from the render prop for `Disclosure`, `Disclosure.Panel`, `Popover` and `Popover.Panel` ([#697](https://github.com/tailwindlabs/headlessui/pull/697))
 
-
 ## [@headlessui/vue@v1.4.0] - 2021-07-29
 
 ### Added
@@ -100,7 +99,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [@headlessui/react@v1.3.0] - 2021-06-21
 
-### Added 
+### Added
 
 - Ensure that you can use `Transition.Child` when using implicit Transitions ([#503](https://github.com/tailwindlabs/headlessui/pull/503))
 - Add new `entered` prop for `Transition` and `Transition.Child` components ([#504](https://github.com/tailwindlabs/headlessui/pull/504))
@@ -120,7 +119,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [@headlessui/vue@v1.3.0] - 2021-06-21
 
-### Added 
+### Added
 
 - Ensure that you can use `TransitionChild` when using implicit Transitions ([#503](https://github.com/tailwindlabs/headlessui/pull/503))
 - Add new `entered` prop for `Transition` and `TransitionChild` components ([#504](https://github.com/tailwindlabs/headlessui/pull/504))
@@ -134,7 +133,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [@headlessui/react@v1.2.0] - 2021-05-10
 
-### Added 
+### Added
 
 - Introduce Open/Closed state, to simplify component communication ([#466](https://github.com/tailwindlabs/headlessui/pull/466))
 
@@ -146,7 +145,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [@headlessui/vue@v1.2.0] - 2021-05-10
 
-### Added 
+### Added
 
 - Introduce Open/Closed state, to simplify component communication ([#466](https://github.com/tailwindlabs/headlessui/pull/466))
 

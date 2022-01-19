@@ -33,7 +33,7 @@ export function shift(event: Partial<KeyboardEvent>) {
 }
 
 export function word(input: string): Partial<KeyboardEvent>[] {
-  return input.split('').map(key => ({ key }))
+  return input.split('').map((key) => ({ key }))
 }
 
 let Default = Symbol()
@@ -134,7 +134,7 @@ export async function type(events: Partial<KeyboardEvent>[], element = document.
       let actions = order[event.key!] ?? order[Default as any]
       for (let action of actions) {
         let checks = action.name.split('And')
-        if (checks.some(check => skip.has(check))) continue
+        if (checks.some((check) => skip.has(check))) continue
 
         let result = action(element, {
           type: action.name,
@@ -324,8 +324,8 @@ let focusableSelector = [
       ? // TODO: Remove this once JSDOM fixes the issue where an element that is
         // "hidden" can be the document.activeElement, because this is not possible
         // in real browsers.
-        selector => `${selector}:not([tabindex='-1']):not([style*='display: none'])`
-      : selector => `${selector}:not([tabindex='-1'])`
+        (selector) => `${selector}:not([tabindex='-1']):not([style*='display: none'])`
+      : (selector) => `${selector}:not([tabindex='-1'])`
   )
   .join(',')
 

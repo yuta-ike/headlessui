@@ -869,7 +869,7 @@ export function assertLabelValue(element: HTMLElement | null, value: string) {
 
   if (element.hasAttribute('aria-labelledby')) {
     let ids = element.getAttribute('aria-labelledby')!.split(' ')
-    expect(ids.map(id => document.getElementById(id)?.textContent).join(' ')).toEqual(value)
+    expect(ids.map((id) => document.getElementById(id)?.textContent).join(' ')).toEqual(value)
     return
   }
 
@@ -1225,7 +1225,7 @@ export function assertTabs(
     expect(list).toHaveAttribute('aria-orientation', orientation)
 
     let activeTab = Array.from(list.querySelectorAll('[id^="headlessui-tabs-tab-"]'))[active]
-    let activePanel = panels.find(panel => panel.id === activeTab.getAttribute('aria-controls'))
+    let activePanel = panels.find((panel) => panel.id === activeTab.getAttribute('aria-controls'))
 
     for (let tab of tabs) {
       expect(tab).toHaveAttribute('id')
