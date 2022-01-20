@@ -413,7 +413,7 @@ describe('Rendering', () => {
             <Combobox.Input />
             <Combobox.Button>Trigger</Combobox.Button>
             <Combobox.Options>
-              {data => (
+              {(data) => (
                 <>
                   <Combobox.Option value="a">{JSON.stringify(data)}</Combobox.Option>
                 </>
@@ -569,10 +569,10 @@ describe('Rendering composition', () => {
           <Combobox.Input />
           <Combobox.Button>Trigger</Combobox.Button>
           <Combobox.Options>
-            <Combobox.Option value="a" className={bag => JSON.stringify(bag)}>
+            <Combobox.Option value="a" className={(bag) => JSON.stringify(bag)}>
               Option A
             </Combobox.Option>
-            <Combobox.Option value="b" disabled className={bag => JSON.stringify(bag)}>
+            <Combobox.Option value="b" disabled className={(bag) => JSON.stringify(bag)}>
               Option B
             </Combobox.Option>
             <Combobox.Option value="c" className="no-special-treatment">
@@ -668,7 +668,7 @@ describe('Rendering composition', () => {
       await click(getComboboxButton())
 
       // Verify options are buttons now
-      getComboboxOptions().forEach(option => assertComboboxOption(option, { tag: 'button' }))
+      getComboboxOptions().forEach((option) => assertComboboxOption(option, { tag: 'button' }))
     })
   )
 })
@@ -697,7 +697,7 @@ describe('Composition', () => {
             <Debug name="Transition" fn={orderFn} />
             <Combobox.Options>
               <Combobox.Option value="a">
-                {data => (
+                {(data) => (
                   <>
                     {JSON.stringify(data)}
                     <Debug name="Combobox.Option" fn={orderFn} />
@@ -782,7 +782,7 @@ describe('Keyboard interactions', () => {
         // Verify we have combobox options
         let options = getComboboxOptions()
         expect(options).toHaveLength(3)
-        options.forEach(option => assertComboboxOption(option, { selected: false }))
+        options.forEach((option) => assertComboboxOption(option, { selected: false }))
 
         // Verify that the first combobox option is active
         assertActiveComboboxOption(options[0])
@@ -948,7 +948,7 @@ describe('Keyboard interactions', () => {
             <Combobox.Input />
             <Combobox.Button>Trigger</Combobox.Button>
             <Combobox.Options>
-              {myOptions.map(myOption => (
+              {myOptions.map((myOption) => (
                 <Combobox.Option key={myOption.id} value={myOption}>
                   {myOption.name}
                 </Combobox.Option>
@@ -1174,7 +1174,7 @@ describe('Keyboard interactions', () => {
           return (
             <Combobox
               value={value}
-              onChange={value => {
+              onChange={(value) => {
                 setValue(value)
                 handleChange(value)
               }}
@@ -1272,7 +1272,7 @@ describe('Keyboard interactions', () => {
         // Verify we have combobox options
         let options = getComboboxOptions()
         expect(options).toHaveLength(3)
-        options.forEach(option => assertComboboxOption(option))
+        options.forEach((option) => assertComboboxOption(option))
         assertActiveComboboxOption(options[0])
       })
     )
@@ -1506,7 +1506,7 @@ describe('Keyboard interactions', () => {
           return (
             <Combobox
               value={value}
-              onChange={value => {
+              onChange={(value) => {
                 setValue(value)
                 handleChange(value)
               }}
@@ -1645,7 +1645,7 @@ describe('Keyboard interactions', () => {
         // Verify we have combobox options
         let options = getComboboxOptions()
         expect(options).toHaveLength(3)
-        options.forEach(option => assertComboboxOption(option))
+        options.forEach((option) => assertComboboxOption(option))
         assertActiveComboboxOption(options[0])
 
         // Try to tab
@@ -1697,7 +1697,7 @@ describe('Keyboard interactions', () => {
         // Verify we have combobox options
         let options = getComboboxOptions()
         expect(options).toHaveLength(3)
-        options.forEach(option => assertComboboxOption(option))
+        options.forEach((option) => assertComboboxOption(option))
         assertActiveComboboxOption(options[0])
 
         // Try to Shift+Tab
@@ -1751,7 +1751,7 @@ describe('Keyboard interactions', () => {
         // Verify we have combobox options
         let options = getComboboxOptions()
         expect(options).toHaveLength(3)
-        options.forEach(option => assertComboboxOption(option))
+        options.forEach((option) => assertComboboxOption(option))
 
         // Verify that the first combobox option is active
         assertActiveComboboxOption(options[0])
@@ -1895,7 +1895,7 @@ describe('Keyboard interactions', () => {
         // Verify we have combobox options
         let options = getComboboxOptions()
         expect(options).toHaveLength(3)
-        options.forEach(option => assertComboboxOption(option))
+        options.forEach((option) => assertComboboxOption(option))
         assertActiveComboboxOption(options[0])
 
         // We should be able to go down once
@@ -1944,7 +1944,7 @@ describe('Keyboard interactions', () => {
         // Verify we have combobox options
         let options = getComboboxOptions()
         expect(options).toHaveLength(3)
-        options.forEach(option => assertComboboxOption(option))
+        options.forEach((option) => assertComboboxOption(option))
         assertActiveComboboxOption(options[1])
 
         // We should be able to go down once
@@ -1987,7 +1987,7 @@ describe('Keyboard interactions', () => {
         // Verify we have combobox options
         let options = getComboboxOptions()
         expect(options).toHaveLength(3)
-        options.forEach(option => assertComboboxOption(option))
+        options.forEach((option) => assertComboboxOption(option))
         assertActiveComboboxOption(options[2])
       })
     )
@@ -2024,7 +2024,7 @@ describe('Keyboard interactions', () => {
         // Verify we have combobox options
         let options = getComboboxOptions()
         expect(options).toHaveLength(3)
-        options.forEach(option => assertComboboxOption(option))
+        options.forEach((option) => assertComboboxOption(option))
         assertActiveComboboxOption(options[0])
 
         // We should be able to go right once
@@ -2082,7 +2082,7 @@ describe('Keyboard interactions', () => {
         // Verify we have combobox options
         let options = getComboboxOptions()
         expect(options).toHaveLength(3)
-        options.forEach(option => assertComboboxOption(option))
+        options.forEach((option) => assertComboboxOption(option))
 
         // ! ALERT: The LAST option should now be active
         assertActiveComboboxOption(options[2])
@@ -2230,7 +2230,7 @@ describe('Keyboard interactions', () => {
         // Verify we have combobox options
         let options = getComboboxOptions()
         expect(options).toHaveLength(3)
-        options.forEach(option => assertComboboxOption(option))
+        options.forEach((option) => assertComboboxOption(option))
         assertActiveComboboxOption(options[0])
       })
     )
@@ -2269,7 +2269,7 @@ describe('Keyboard interactions', () => {
         // Verify we have combobox options
         let options = getComboboxOptions()
         expect(options).toHaveLength(3)
-        options.forEach(option => assertComboboxOption(option))
+        options.forEach((option) => assertComboboxOption(option))
         assertActiveComboboxOption(options[2])
 
         // We should not be able to go up (because those are disabled)
@@ -2321,7 +2321,7 @@ describe('Keyboard interactions', () => {
         // Verify we have combobox options
         let options = getComboboxOptions()
         expect(options).toHaveLength(3)
-        options.forEach(option => assertComboboxOption(option))
+        options.forEach((option) => assertComboboxOption(option))
         assertActiveComboboxOption(options[2])
 
         // We should be able to go down once
@@ -2380,7 +2380,7 @@ describe('Keyboard interactions', () => {
         // Verify we have combobox options
         let options = getComboboxOptions()
         expect(options).toHaveLength(3)
-        options.forEach(option => assertComboboxOption(option))
+        options.forEach((option) => assertComboboxOption(option))
         assertActiveComboboxOption(options[2])
 
         // We should be able to go left once
@@ -3250,7 +3250,7 @@ describe('Mouse interactions', () => {
       // Verify we have combobox options
       let options = getComboboxOptions()
       expect(options).toHaveLength(3)
-      options.forEach(option => assertComboboxOption(option))
+      options.forEach((option) => assertComboboxOption(option))
     })
   )
 
@@ -3795,7 +3795,7 @@ describe('Mouse interactions', () => {
         return (
           <Combobox
             value={value}
-            onChange={value => {
+            onChange={(value) => {
               setValue(value)
               handleChange(value)
             }}
@@ -3848,7 +3848,7 @@ describe('Mouse interactions', () => {
         return (
           <Combobox
             value={value}
-            onChange={value => {
+            onChange={(value) => {
               setValue(value)
               handleChange(value)
             }}

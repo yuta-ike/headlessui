@@ -124,15 +124,15 @@ let reducers: {
     let activeOptionIndex = calculateActiveIndex(action, {
       resolveItems: () => state.options,
       resolveActiveIndex: () => state.activeOptionIndex,
-      resolveId: item => item.id,
-      resolveDisabled: item => item.dataRef.current.disabled,
+      resolveId: (item) => item.id,
+      resolveDisabled: (item) => item.dataRef.current.disabled,
     })
 
     if (state.searchQuery === '' && state.activeOptionIndex === activeOptionIndex) return state
     return { ...state, searchQuery: '', activeOptionIndex }
   },
   [ActionTypes.SelectOption](state, action) {
-    let option = state.options.find(item => item.id === action.id)
+    let option = state.options.find((item) => item.id === action.id)
     if (!option) return state
 
     let { dataRef } = option
@@ -177,7 +177,7 @@ let reducers: {
     let currentActiveOption =
       state.activeOptionIndex !== null ? nextOptions[state.activeOptionIndex] : null
 
-    let idx = nextOptions.findIndex(a => a.id === action.id)
+    let idx = nextOptions.findIndex((a) => a.id === action.id)
 
     if (idx !== -1) nextOptions.splice(idx, 1)
 
@@ -265,12 +265,13 @@ export function Combobox<TTag extends ElementType = typeof DEFAULT_COMBOBOX_TAG,
     propsRef.current.onSearch = onSearch
   }, [onSearch, propsRef])
   useIsoMorphicEffect(() => dispatch({ type: ActionTypes.SetDisabled, disabled }), [disabled])
-  useIsoMorphicEffect(() => dispatch({ type: ActionTypes.SetOrientation, orientation }), [
-    orientation,
-  ])
+  useIsoMorphicEffect(
+    () => dispatch({ type: ActionTypes.SetOrientation, orientation }),
+    [orientation]
+  )
 
   // Handle outside click
-  useWindowEvent('mousedown', event => {
+  useWindowEvent('mousedown', (event) => {
     let target = event.target as HTMLElement
 
     if (comboboxState !== ComboboxStates.Open) return
@@ -546,9 +547,10 @@ function Label<TTag extends ElementType = typeof DEFAULT_LABEL_TAG>(
   let [state] = useComboboxContext([Combobox.name, Label.name].join('.'))
   let id = `headlessui-combobox-label-${useId()}`
 
-  let handleClick = useCallback(() => state.inputRef.current?.focus({ preventScroll: true }), [
-    state.inputRef,
-  ])
+  let handleClick = useCallback(
+    () => state.inputRef.current?.focus({ preventScroll: true }),
+    [state.inputRef]
+  )
 
   let slot = useMemo<LabelRenderPropArg>(
     () => ({ open: state.comboboxState === ComboboxStates.Open, disabled: state.disabled }),
@@ -601,10 +603,10 @@ let Options = forwardRefWithAs(function Options<
     return state.comboboxState === ComboboxStates.Open
   })()
 
-  let labelledby = useComputed(() => state.labelRef.current?.id ?? state.buttonRef.current?.id, [
-    state.labelRef.current,
-    state.buttonRef.current,
-  ])
+  let labelledby = useComputed(
+    () => state.labelRef.current?.id ?? state.buttonRef.current?.id,
+    [state.labelRef.current, state.buttonRef.current]
+  )
 
   let slot = useMemo<OptionsRenderPropArg>(
     () => ({ open: state.comboboxState === ComboboxStates.Open }),
@@ -722,11 +724,10 @@ function Option<
     dispatch({ type: ActionTypes.GoToOption, focus: Focus.Nothing })
   }, [disabled, active, dispatch])
 
-  let slot = useMemo<OptionRenderPropArg>(() => ({ active, selected, disabled }), [
-    active,
-    selected,
-    disabled,
-  ])
+  let slot = useMemo<OptionRenderPropArg>(
+    () => ({ active, selected, disabled }),
+    [active, selected, disabled]
+  )
   let propsWeControl = {
     id,
     role: 'option',
