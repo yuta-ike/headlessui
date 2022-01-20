@@ -35,6 +35,7 @@
     "prepublishOnly": "npm run build",
     "test": "../../scripts/test.sh",
     "build": "../../scripts/build.sh --external:react --external:react-dom",
+    "watch": "../../scripts/watch.sh --external:react --external:react-dom",
     "lint": "../../scripts/lint.sh"
   },
   "peerDependencies": {
